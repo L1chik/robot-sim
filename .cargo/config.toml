@@ -1,0 +1,14 @@
+[build]
+target = "avr-atmega328p.json"
+
+
+[profile.dev]
+panic = "abort"
+
+
+[unstable]
+build-std = ["core"]
+build-std-features = ["compiler-builtins-mangled-names"]
+
+[target.'cfg(target_arch = "avr")']
+runner = "ravedude uno -cb 57600"
