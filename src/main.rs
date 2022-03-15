@@ -39,7 +39,7 @@ async fn main() {
 
     let mut grabbed = true;
     set_cursor_grab(grabbed);
-    show_mouse(false);
+    show_mouse(true);
 
     loop {
         let delta = get_frame_time();
@@ -62,21 +62,23 @@ async fn main() {
             )
                 .normalize();
 
-            right = front.cross(world_up).normalize();
-            up = right.cross(front).normalize();
 
-            x += if switch { 0.04 } else { -0.04 };
-            if x >= bounds || x <= -bounds {
-                switch = !switch;
-            }
-
-            set_camera(&Camera3D {
-            position: position,
-            up: up,
-            target: position + front,
-            ..Default::default()
-        });
         }
+
+        right = front.cross(world_up).normalize();
+        up = right.cross(front).normalize();
+
+        x += if switch { 0.04 } else { -0.04 };
+        if x >= bounds || x <= -bounds {
+            switch = !switch;
+        }
+
+        set_camera(&Camera3D {
+        position: position,
+        up: up,
+        target: position + front,
+        ..Default::default()
+        });
 
         clear_background(LIGHTGRAY);
 
