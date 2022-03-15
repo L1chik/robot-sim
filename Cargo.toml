@@ -1,21 +1,8 @@
 [package]
 name = "robo-sim"
 version = "0.1.0"
+edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-panic-halt = "0.2.0"
-
-[dependencies.arduino-hal]
-git = "https://github.com/Rahix/avr-hal"
-rev = "e897783"
-features = ["arduino-uno"]
-
-
-[dependencies.avr-device]
-version = "0.3"
-
-
-[dependencies.embedded-hal]
-version = "0.2.3"
-features = ["unproven"]
+macroquad = "0.3.15"

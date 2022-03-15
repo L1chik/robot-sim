@@ -1,46 +1,92 @@
-#![no_std]
-#![no_main]
+extern crate macroquad;
 
-extern crate embedded_hal as hal;
+use macroquad::prelude::*;
+use macroquad::window::next_frame;
 
-use core::panic::PanicInfo;
-use hal::prelude::*;
-use hal::Pwm;
+const LOOK_SPEED: f32 = 0.1;
 
-#[panic_handler]
-fn panic(_info: & PanicInfo) -> ! {
-    loop {
-
+fn conf() -> Conf {
+    Conf {
+        window_title: String::from("Robot simulator"),
+        window_width: 1260,
+        window_height: 760,
+        fullscreen: false,
+        ..Default::default()
     }
 }
 
-#[arduino_hal::entry]
-fn main() -> ! {
-    let dp = arduino_hal::Peripherals::take().unwrap();
-    let pins = arduino_hal::pins!(dp);
+#[macroquad::main("conf")]
+async fn main() {
+    let mut x = 0.0;
+    let mut switch = false;
+    let bounds = 8.0;
 
-    // Important because this sets the bit in the DDR register!
-    pins.d9.into_output();
-    // - TC1 runs off a 250kHz clock, with 5000 counts per overflow => 50 Hz signal.
-    // - Each count increases the duty-cycle by 4us.
-    // - Use OC1A which is connected to D9 of the Arduino Uno.
-    let tc1 = dp.TC1;
-    let mut pwm: Pwm = {};
+    let world_up = vec3(0.0, 1.0, 0.0);
+    let mut yaw: f32 = 1.18;
+    let mut pitch: f32 = 0.0;
 
-    // tc1.icr1.write(|w| unsafe { w.bits(4999) });
-    // tc1.tccr1a
-    //     .write(|w| w.wgm1().bits(0b10).com1a().match_clear());
-    // tc1.tccr1b
-    //     .write(|w| w.wgm1().bits(0b11).cs1().prescale_64());
+    let mut front = vec3(
+        yaw.cos() * pitch.cos(),
+        pitch.sin(),
+        yaw.sin() * pitch.cos(),
+    )
+    .normalize();
+    let mut right = front.cross(world_up).normalize();
+    let mut up;
+
+    let mut position = vec3(0.0, 1.0, 0.0);
+    let mut last_mouse_position: Vec2 = mouse_position().into();
+
+    let mut grabbed = true;
+    set_cursor_grab(grabbed);
+    show_mouse(false);
 
     loop {
-        // 100 counts => 0.4ms
-        // 700 counts => 2.8ms
-        pwm.set_duty((), 15 as u8);
-        arduino_hal::delay_ms(20);
-        pwm.set_duty((), 24 as u8);
-        arduino_hal::delay_ms(20);
-        pwm.set_duty((), 31 as u8);
-        arduino_hal::delay_ms(20);
+        let delta = get_frame_time();
+
+        if is_mouse_button_down(MouseButton::Middle){
+            let mouse_position: Vec2 = mouse_position().into();
+            let mouse_delta = mouse_position - last_mouse_position;
+            last_mouse_position = mouse_position;
+
+            yaw += mouse_delta.x * delta * LOOK_SPEED;
+            pitch += mouse_delta.y * delta * -LOOK_SPEED;
+
+            pitch = if pitch > 1.5 { 1.5 } else { pitch };
+            pitch = if pitch < -1.5 { -1.5 } else { pitch };
+
+            front = vec3(
+                yaw.cos() * pitch.cos(),
+                pitch.sin(),
+                yaw.sin() * pitch.cos(),
+            )
+                .normalize();
+
+            right = front.cross(world_up).normalize();
+            up = right.cross(front).normalize();
+
+            x += if switch { 0.04 } else { -0.04 };
+            if x >= bounds || x <= -bounds {
+                switch = !switch;
+            }
+
+            set_camera(&Camera3D {
+            position: position,
+            up: up,
+            target: position + front,
+            ..Default::default()
+        });
+        }
+
+        clear_background(LIGHTGRAY);
+
+        // Going 3d!
+
+
+
+        draw_grid(20, 1., BLACK, GRAY);
+        set_default_camera();
+
+        next_frame().await
     }
 }
