@@ -1,8 +1,5 @@
 [workspace]
 
 members = [
-	"macro",
-	"k3d",
-
-
+	"bluster",
 ]
