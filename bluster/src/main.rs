@@ -1,26 +1,27 @@
+mod gizmo;
+mod node;
+
 extern crate kiss3d;
 extern crate nalgebra as na;
 
 
 use std::path::Path;
 use kiss3d::window::Window;
-use kiss3d::event::{Action, MouseButton, TouchAction, WindowEvent};
+use kiss3d::event::{Action, Key, MouseButton, WindowEvent};
 use kiss3d::light::Light;
 use kiss3d::camera::{ArcBall, Camera};
-use na::{Isometry3, OVector, Point3, Point2, Translation3, UnitQuaternion, Vector3, OPoint, Vector2};
+use na::{Isometry3, Point3, Point2, Translation3, UnitQuaternion, Vector3, Vector2};
 use ncollide3d::pipeline::CollisionGroups;
 use ncollide3d::query::{Ray, RayIntersection};
-use ncollide3d::shape::FeatureId;
-use ncollide3d::world::CollisionWorld;
+use ncollide3d::shape::{FeatureId};
 
 
 fn draw_ray(ray: Ray<f32>, window: &mut Window) {
-    let groups = CollisionGroups::new();
-    let mut min_intersection =
-            RayIntersection::new(0.0, Vector3::new(0.0, 0.0, 0.0), FeatureId::Unknown);
+    let min_intersection =
+            RayIntersection::new(1.0, Vector3::new(1.0, 1.0, 1.0), FeatureId::Unknown);
 
     let p1 = ray.origin;
-    let p2 = ray.point_at(20.0);
+    let p2 = ray.point_at(min_intersection.toi + 20.0);
 
     // println!("p1: {:?}, p2: {:?}", &p1, &p2);
     // Drawing ray
@@ -69,7 +70,7 @@ fn main() {
     let mut arc_ball = ArcBall::new(eye, at);
     arc_ball.rebind_rotate_button(Some(MouseButton::Button3));
     let mut last_pos = Point2::new(0.0, 0.0);
-    let mut sel_pos = Vector3::new(0.0, 0.0, 0.0);
+    let sel_pos = Vector3::new(0.0, 0.0, 0.0);
     let mut ray = Ray::new(
         Point3::new(0.0, 0.0, 0.0),
         sel_pos);
@@ -78,40 +79,48 @@ fn main() {
     let mut control_point = window.add_sphere(0.5);
     control_point.set_color(1.0, 0.522, 0.0);
 
-
     // Robot mesh
-    let robot_path = Path::new("/home/l1chik/Blender/monkey2.obj");
-    let robot_mtl = Path::new("/home/l1chik/Blender/monkey2.mtl");
-    let robot_scale = Vector3::new(1.0, 1.0, 1.0);
-    let rot = UnitQuaternion::from_axis_angle(&Vector3::y_axis(), 0.1);
+    node::robot_init(&mut window);
 
-    let mut robot  = window.add_obj(robot_path, robot_mtl, robot_scale);
+
+
+    // TODO: object picking with raycast. Impl RayCast for SceneNode???
+    // let mut cube = Cuboid::new(Vector3::new(1.0f32, 1.0, 1.0));
 
     // Scene render
     while window.render_with_camera(&mut arc_ball) {
         let _ = draw_grid(&mut window, 1.0, 30);
 
-        robot.prepend_to_local_rotation(&rot);
+        // robot.prepend_to_local_rotation(&rot);
         draw_ray(ray, &mut window);
-
 
         for mut event in window.events().iter() {
             match event.value {
                 WindowEvent::FramebufferSize(x, y) => {
                     println!("frame buffer size event {}, {}", x, y);
-                }
+                },
                 WindowEvent::MouseButton(MouseButton::Button1, Action::Press, _modif) => {
                     let window_size = Vector2::new(
                         window.size()[0] as f32,
                         window.size()[1] as f32);
 
-                    let (pos, dir) = arc_ball.unproject(&last_pos, &window_size);
-                    
+                    let (pos, dir) = arc_ball
+                        .unproject(&last_pos, &window_size);
+
                     ray = Ray::new(pos, dir);
-                    robot.set_color(1.0, 0.522, 0.0);
-                }
+
+                    // ray.distance_to_point()
+                    // println!("{:?}", cube.intersects_ray( &Isometry3::identity(), &ray, std::f32::MAX));
+                },
                 WindowEvent::CursorPos(x, y, _modif) => {
                     last_pos = na::Point2::new(x as f32, y as f32);
+                },
+
+                WindowEvent::Key(input, Action::Press, _modif) => {
+                    gizmo::loc_trans(input);
+                    gizmo::loc_rot(input);
+
+
                 }
                 _ => {}
             }
