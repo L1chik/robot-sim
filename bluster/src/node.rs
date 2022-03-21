@@ -8,7 +8,7 @@ pub struct Robot {
     pub base: SceneNode,
     pub shoulder: SceneNode,
     // lower_arm: SceneNode,
-    elbow: SceneNode,
+    pub elbow: SceneNode,
     upper_arm: SceneNode,
     // flange: SceneNode,
 }

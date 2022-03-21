@@ -131,6 +131,9 @@ fn main() {
                             println!("active is shoulder");
                             active = robot.shoulder.clone()
                         }
+                        Key::Key3 => {
+                            active = robot.elbow.clone()
+                        }
                         _ => {}
                     }
                     // active = robot.active(input, &mut active);

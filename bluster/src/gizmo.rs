@@ -5,17 +5,19 @@ use crate::node::Robot;
 
 pub fn loc_rot(input: Key, part: &mut SceneNode) {
     match input {
-        Key::H => part.append_rotation(&UnitQuaternion::new(
-        Vector3::new(-0.2, 0.0, 0.0))),
-        Key::K => part.append_rotation(&UnitQuaternion::new(
+        // Key::H => part.append_rotation(&UnitQuaternion::new(
+        // Vector3::new(-0.2, 0.0, 0.0))),
+        Key::H => part.append_rotation_wrt_center(&UnitQuaternion::new(
+            Vector3::new(-0.2, 0.0, 0.0))),
+        Key::K => part.append_rotation_wrt_center(&UnitQuaternion::new(
         Vector3::new(0.2, 0.0, 0.0))),
-        Key::J => part.append_rotation(&UnitQuaternion::new(
+        Key::J => part.append_rotation_wrt_center(&UnitQuaternion::new(
         Vector3::new(0.0, -0.2, 0.0))),
-        Key::U => part.append_rotation(&UnitQuaternion::new(
+        Key::U => part.append_rotation_wrt_center(&UnitQuaternion::new(
         Vector3::new(0.0, 0.2, 0.0))),
-        Key::I => part.append_rotation(&UnitQuaternion::new(
+        Key::I => part.append_rotation_wrt_center(&UnitQuaternion::new(
         Vector3::new(0.0, 0.0, 0.2))),
-        Key::Y => part.append_rotation(&UnitQuaternion::new(
+        Key::Y => part.append_rotation_wrt_center(&UnitQuaternion::new(
         Vector3::new(0.0, 0.0, -0.2))),
         _ => {}
     }
