@@ -68,7 +68,11 @@ fn main() {
     let eye = Point3::new(2.0, 2.0, 2.0);
     let at = Point3::origin();
     let mut arc_ball = ArcBall::new(eye, at);
-    arc_ball.rebind_rotate_button(Some(MouseButton::Button3));
+
+    // Comment on Mac
+    // arc_ball.rebind_rotate_button(Some(MouseButton::Button3));
+
+    // Ray settings
     let mut last_pos = Point2::new(0.0, 0.0);
     let sel_pos = Vector3::new(0.0, 0.0, 0.0);
     let mut ray = Ray::new(
@@ -80,7 +84,8 @@ fn main() {
     control_point.set_color(1.0, 0.522, 0.0);
 
     // Robot mesh
-    node::robot_init(&mut window);
+    let robot = node::robot_init(&mut window);
+    let mut active = robot.base.clone();
 
 
 
@@ -117,10 +122,20 @@ fn main() {
                 },
 
                 WindowEvent::Key(input, Action::Press, _modif) => {
-                    gizmo::loc_trans(input);
-                    gizmo::loc_rot(input);
-
-
+                    match input{
+                        Key::Key1 => {
+                            println!("active is base");
+                            active = robot.base.clone()
+                        },
+                        Key::Key2 => {
+                            println!("active is shoulder");
+                            active = robot.shoulder.clone()
+                        }
+                        _ => {}
+                    }
+                    // active = robot.active(input, &mut active);
+                    gizmo::loc_trans(input, &mut active);
+                    gizmo::loc_rot(input, &mut active);
                 }
                 _ => {}
             }
