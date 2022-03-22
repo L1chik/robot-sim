@@ -133,7 +133,16 @@ fn main() {
                             active = robot.shoulder.clone()
                         }
                         Key::Key3 => {
+                            active = robot.lower_arm.clone()
+                        }
+                        Key::Key4 => {
                             active = robot.elbow.clone()
+                        }
+                        Key::Key5 => {
+                            active = robot.upper_arm.clone()
+                        }
+                        Key::Key6 => {
+                            active = robot.wrist.clone()
                         }
                         _ => {}
                     }
