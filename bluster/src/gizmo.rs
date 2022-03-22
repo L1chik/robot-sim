@@ -1,24 +1,43 @@
 use kiss3d::event::Key;
 use kiss3d::scene::SceneNode;
-use na::{Translation3, UnitQuaternion, Vector3};
+use na::{Translation3, UnitQuaternion, Vector3, Unit};
 use crate::node::Robot;
 
 pub fn loc_rot(input: Key, part: &mut SceneNode) {
+    let vec = Vector3::new(0.0, 0.0, 1.0); //Unit::new_normalize(vec);
+    let axis = Unit::new_normalize(vec);
+
     match input {
         // Key::H => part.append_rotation(&UnitQuaternion::new(
         // Vector3::new(-0.2, 0.0, 0.0))),
-        Key::H => part.append_rotation_wrt_center(&UnitQuaternion::new(
-            Vector3::new(-0.2, 0.0, 0.0))),
-        Key::K => part.append_rotation_wrt_center(&UnitQuaternion::new(
-        Vector3::new(0.2, 0.0, 0.0))),
-        Key::J => part.append_rotation_wrt_center(&UnitQuaternion::new(
-        Vector3::new(0.0, -0.2, 0.0))),
-        Key::U => part.append_rotation_wrt_center(&UnitQuaternion::new(
-        Vector3::new(0.0, 0.2, 0.0))),
-        Key::I => part.append_rotation_wrt_center(&UnitQuaternion::new(
-        Vector3::new(0.0, 0.0, 0.2))),
-        Key::Y => part.append_rotation_wrt_center(&UnitQuaternion::new(
-        Vector3::new(0.0, 0.0, -0.2))),
+
+        Key::H => part.append_rotation_wrt_center(&UnitQuaternion::from_axis_angle(
+        &Vector3::x_axis(), -0.014)),
+        // Key::H => part.append_rotation_wrt_center(&UnitQuaternion::new(
+        //     Vector3::new(-0.2, 0.0, 0.0))),
+
+        Key::K => part.append_rotation_wrt_center(&UnitQuaternion::from_axis_angle(
+        &Vector3::x_axis(), 0.014)),
+        // Key::K => part.append_rotation_wrt_center(&UnitQuaternion::new(
+        // Vector3::new(0.2, 0.0, 0.0))),
+
+        Key::J => part.append_rotation_wrt_center(&UnitQuaternion::from_axis_angle(
+        &Vector3::y_axis(), -0.014)),
+        // Key::J => part.append_rotation_wrt_center(&UnitQuaternion::new(
+        // Vector3::new(0.0, -0.2, 0.0))),
+
+        Key::U => part.append_rotation_wrt_center(&UnitQuaternion::from_axis_angle(
+        &Vector3::y_axis(), 0.014)),
+        // Key::U => part.append_rotation_wrt_center(&UnitQuaternion::new(
+        // Vector3::new(0.0, 0.2, 0.0))),
+
+        Key::I => part.append_rotation_wrt_center(&UnitQuaternion::from_axis_angle(
+        &Vector3::z_axis(), 0.014)),
+        // Key::I => part.append_rotation_wrt_center(&UnitQuaternion::new(
+        // Vector3::new(0.0, 0.0, 0.2))),
+
+        Key::Y => part.append_rotation_wrt_center(&UnitQuaternion::from_axis_angle(
+        &Vector3::z_axis(), -0.014)),
         _ => {}
     }
 }

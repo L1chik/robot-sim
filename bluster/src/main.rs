@@ -80,8 +80,8 @@ fn main() {
         sel_pos);
 
     // Control point
-    let mut control_point = window.add_sphere(0.5);
-    control_point.set_color(1.0, 0.522, 0.0);
+    // let mut control_point = window.add_sphere(0.5);
+    // control_point.set_color(1.0, 0.522, 0.0);
 
     // Robot mesh
     let robot = node::robot_init(&mut window);
