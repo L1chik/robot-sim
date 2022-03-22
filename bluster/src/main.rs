@@ -14,6 +14,7 @@ use na::{Isometry3, Point3, Point2, Translation3, UnitQuaternion, Vector3, Vecto
 use ncollide3d::pipeline::CollisionGroups;
 use ncollide3d::query::{Ray, RayIntersection};
 use ncollide3d::shape::{FeatureId};
+use crate::node::Robot;
 
 
 fn draw_ray(ray: Ray<f32>, window: &mut Window) {
