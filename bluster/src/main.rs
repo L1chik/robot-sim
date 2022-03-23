@@ -6,11 +6,13 @@ extern crate nalgebra as na;
 
 
 use std::path::Path;
+use std::rc::Rc;
 use kiss3d::window::Window;
 use kiss3d::event::{Action, Key, MouseButton, WindowEvent};
 use kiss3d::light::Light;
 use kiss3d::camera::{ArcBall, Camera};
-use na::{Isometry3, Point3, Point2, Translation3, UnitQuaternion, Vector3, Vector2};
+use kiss3d::text::Font;
+use na::{Isometry3, Point3, Point2, Translation3, UnitQuaternion, Vector3, Vector2, Isometry2, Translation2};
 use ncollide3d::pipeline::CollisionGroups;
 use ncollide3d::query::{Ray, RayIntersection};
 use ncollide3d::shape::{FeatureId};
@@ -57,13 +59,30 @@ fn draw_grid(window: &mut Window, spacing: f32, slices: u32) {
         }).collect::<Vec<_>>();
 }
 
+fn draw_info(window: &mut Window, robot: &Robot) {
+    let font = Font::new(&Path::new("bluster/src/assets/Robot.ttf")).unwrap();
+
+    window.draw_text(
+            format!("Upper hand rotation: {:?}; (min, max): ",
+                    &robot.upper_arm.angle )
+                .as_str(),
+
+        &Point2::new(320.0, 10.0),
+        70.0,
+        &font,
+        &Point3::new(1.0, 0.659, 0.392),
+        );
+
+    println!("angle: {:?}", robot.upper_arm.angle.1)
+}
+
+
 fn main() {
     // Window settings
     let mut window = Window::new_with_size(
         "Robot simulator", 1280, 720);
     window.set_light(Light::Absolute(Point3::new(5.0, 5.0, 5.0)));
     window.set_background_color(0.192, 0.192, 0.192);
-    // let world = CollisionWorld::new(0);
 
     // Camera settings
     let eye = Point3::new(2.0, 2.0, 2.0);
@@ -80,17 +99,19 @@ fn main() {
         Point3::new(0.0, 0.0, 0.0),
         sel_pos);
 
-    // Control point
-    // let mut control_point = window.add_sphere(0.5);
-    // control_point.set_color(1.0, 0.522, 0.0);
 
     // Robot mesh
-    let robot = node::robot_init(&mut window);
-    let mut active = robot.base.clone();
+    let mut robot = node::robot_init(&mut window);
+    let mut active = &mut robot.set_active();
 
 
+    // Info
+    let mut tablet = window.add_rectangle(300.0, 400.0);
+    tablet.set_local_translation(Translation2::new(490.0, 160.0));
+    tablet.set_color(0.278, 0.278, 0.278);
 
-    // TODO: object picking with raycast. Impl RayCast for SceneNode???
+
+    // TODO: object picking with raycast. Impl RayCast for SceneNode
     // let mut cube = Cuboid::new(Vector3::new(1.0f32, 1.0, 1.0));
 
     // Scene render
@@ -98,8 +119,20 @@ fn main() {
         let _ = draw_grid(&mut window, 1.0, 30);
         draw_ray(ray, &mut window);
 
+        // window.draw_text(
+        //     format!("Upper arm rotation: {:?}; (min, max): \n\
+        //     Shoulder rotation: {:?}; (min, max): ",
+        //             &robot.upper_arm.angle,
+        //     &robot.shoulder.angle)
+        //         .as_str(),
+        //
+        // &Point2::new(320.0, 10.0),
+        // 70.0,
+        // &Font::default(),
+        // &Point3::new(1.0, 0.659, 0.392),
+        // );
 
-        gizmo::animation(&mut active);
+        println!("{:?}", active.angle);
 
 
         for mut event in window.events().iter() {
@@ -125,32 +158,36 @@ fn main() {
                     match input{
                         Key::Key1 => {
                             println!("active is base");
-                            active = robot.base.clone()
+                            active = &mut robot.base
                         },
                         Key::Key2 => {
                             println!("active is shoulder");
-                            active = robot.shoulder.clone()
+                            active = &mut robot.shoulder
                         }
                         Key::Key3 => {
-                            active = robot.lower_arm.clone()
+                            active = &mut robot.lower_arm
                         }
                         Key::Key4 => {
-                            active = robot.elbow.clone()
+                            active = &mut robot.elbow
                         }
                         Key::Key5 => {
-                            active = robot.upper_arm.clone()
+                            active = &mut robot.upper_arm
                         }
                         Key::Key6 => {
-                            active = robot.wrist.clone()
+                            active = &mut robot.wrist
                         }
                         _ => {}
                     }
                     // active = robot.active(input, &mut active);
-                    gizmo::loc_trans(input, &mut active);
-                    gizmo::loc_rot(input, &mut active);
+                    gizmo::loc_trans(input, active);
+                    gizmo::loc_rot(input, active);
                 }
-                _ => {}
+                _ => {
+
+                }
             }
         }
+
+        // draw_info(&mut window, &test);
     }
 }

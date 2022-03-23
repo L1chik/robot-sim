@@ -2,9 +2,11 @@ use std::path::Path;
 use kiss3d::scene::SceneNode;
 use kiss3d::window::Window;
 use kiss3d::event::Key;
-use na::{Vector3, OVector, Unit};
+use kiss3d::text::Font;
+use na::{Vector3, OVector, Unit, Point2, Point3};
 use ncollide3d::na::Translation3;
 
+#[derive(Clone)]
 pub struct Robot {
     pub base: Part,
     pub shoulder: Part,
@@ -83,7 +85,7 @@ pub fn robot_init(window: &mut Window) -> Robot {
     let mut elbow = Part {
         node: elbow_model,
         axis: Vector3::x_axis(),
-        angle: (18.0, 0.0, 180.0),
+        angle: (180.0, 0.0, 18.0),
     };
 
     let mut upper_arm = Part {
@@ -111,5 +113,11 @@ pub fn robot_init(window: &mut Window) -> Robot {
         lower_arm,
         upper_arm,
         wrist,
+    }
+}
+
+impl Robot {
+    pub fn set_active(&mut self) -> Part {
+        self.base.clone()
     }
 }

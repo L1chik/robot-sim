@@ -7,14 +7,14 @@ pub fn loc_rot(input: Key, part: &mut Part) {
 
     match input {
         Key::J => {
-            // if part.angle.0 != part.angle.1 {
-            //     let rot = UnitQuaternion::from_axis_angle(
-            //     &part.axis, -0.0174533);
-            //     part.node.append_rotation_wrt_center(&rot);
-            //
-            //     part.angle.1 -= (rot.angle() * 180.0 / std::f32::consts::PI).round();
-            //     println!("current rotation: {:?}", part.angle);
-            // };
+            if part.angle.0 != part.angle.1 {
+                let rot = UnitQuaternion::from_axis_angle(
+                &part.axis, -0.0174533);
+                part.node.append_rotation_wrt_center(&rot);
+
+                part.angle.1 -= (rot.angle() * 180.0 / std::f32::consts::PI).round();
+                println!("current rotation: {:?}", part.angle);
+            };
         }
 
         Key::U => {
