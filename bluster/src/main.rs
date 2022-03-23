@@ -96,9 +96,11 @@ fn main() {
     // Scene render
     while window.render_with_camera(&mut arc_ball) {
         let _ = draw_grid(&mut window, 1.0, 30);
-
-        // robot.prepend_to_local_rotation(&rot);
         draw_ray(ray, &mut window);
+
+
+        gizmo::animation(&mut active);
+
 
         for mut event in window.events().iter() {
             match event.value {
@@ -114,9 +116,6 @@ fn main() {
                         .unproject(&last_pos, &window_size);
 
                     ray = Ray::new(pos, dir);
-
-                    // ray.distance_to_point()
-                    // println!("{:?}", cube.intersects_ray( &Isometry3::identity(), &ray, std::f32::MAX));
                 },
                 WindowEvent::CursorPos(x, y, _modif) => {
                     last_pos = na::Point2::new(x as f32, y as f32);
@@ -153,7 +152,5 @@ fn main() {
                 _ => {}
             }
         }
-
-
     }
 }

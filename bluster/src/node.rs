@@ -18,6 +18,9 @@ pub struct Robot {
 pub struct Part {
     pub node: SceneNode,
     pub axis: Unit<Vector3<f32>>,
+
+    // MIN, CURRENT, MAX
+    pub angle: (f32, f32, f32),
 }
 
 struct PartsPathes<'a> {
@@ -60,40 +63,46 @@ pub fn robot_init(window: &mut Window) -> Robot {
     let mut wrist_model = upper_arm_model.add_obj(parts.wrist_obj, parts.wrist_mtl, scale);
 
      let mut base = Part {
-        node: base_model,
-        axis: Vector3::y_axis(),
+         node: base_model,
+         axis: Vector3::y_axis(),
+         angle: (0.0, 0.0, 0.0),
     };
 
     let mut shoulder = Part {
         node: shoulder_model,
         axis:Vector3::y_axis(),
+        angle: (-170.0, 0.0, 170.0),
     };
 
     let mut lower_arm = Part {
         node: lower_arm_model,
         axis: Vector3::x_axis(),
+        angle: (39.0, 90.0, 160.0),
     };
 
     let mut elbow = Part {
         node: elbow_model,
         axis: Vector3::x_axis(),
+        angle: (18.0, 0.0, 180.0),
     };
 
     let mut upper_arm = Part {
         node: upper_arm_model,
         axis: Vector3::x_axis(),
+        angle: (-40.0, 0.0, 160.0),
     };
 
     let mut wrist = Part {
         node: wrist_model,
         axis: Vector3::z_axis(),
+        angle: (-180.0, 0.0, 180.0),
     };
 
-    shoulder.node.append_translation(&Translation3::new(0.0, 0.0, 0.0));
-    lower_arm.node.append_translation(&Translation3::new(0.0, 0.8, 0.25));
-    elbow.node.append_translation(&Translation3::new(0.0, 0.7, -1.47));
-    upper_arm.node.append_translation(&Translation3::new(0.0, 0.9, 1.85));
-    wrist.node.append_translation(&Translation3::new(0.0, -0.1, 0.32));
+    shoulder.node.set_local_translation(Translation3::new(0.0, 0.0, 0.0));
+    lower_arm.node.set_local_translation(Translation3::new(0.0, 0.8, 0.25));
+    elbow.node.set_local_translation(Translation3::new(0.0, 0.73, -1.47));
+    upper_arm.node.set_local_translation(Translation3::new(0.0, 0.9, 1.85));
+    wrist.node.set_local_translation(Translation3::new(0.0, -0.1, 0.32));
 
     Robot {
         base,
@@ -104,29 +113,3 @@ pub fn robot_init(window: &mut Window) -> Robot {
         wrist,
     }
 }
-
-// impl Part {
-//     fn set_model(&mut self, model: SceneNode) {
-//         self.node = model
-//     }
-//
-//     fn set_axis(&mut self, axis: OVector<T, D>) {
-//         self.axis = axis
-//     }
-// }
-
-// impl Robot {
-//     pub fn active(&self, input: Key, ) -> SceneNode {
-//         match input {
-//             Key::Key1 => {
-//                 println!("active is base");
-//                 self.base.clone()
-//             },
-//             Key::Key2 => {
-//                 println!("active is shoulder");
-//                 self.shoulder.clone()
-//             },
-//             _ => {self.shoulder.clone()}
-//         }
-//     }
-// }

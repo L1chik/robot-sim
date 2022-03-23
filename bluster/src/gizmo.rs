@@ -6,12 +6,28 @@ use crate::node::{Robot, Part};
 pub fn loc_rot(input: Key, part: &mut Part) {
 
     match input {
-        Key::J => part.node.append_rotation_wrt_center(&UnitQuaternion::from_axis_angle(
-        &part.axis, -0.014)),
+        Key::J => {
+            // if part.angle.0 != part.angle.1 {
+            //     let rot = UnitQuaternion::from_axis_angle(
+            //     &part.axis, -0.0174533);
+            //     part.node.append_rotation_wrt_center(&rot);
+            //
+            //     part.angle.1 -= (rot.angle() * 180.0 / std::f32::consts::PI).round();
+            //     println!("current rotation: {:?}", part.angle);
+            // };
+        }
 
-        Key::U => part.node.append_rotation_wrt_center(&UnitQuaternion::from_axis_angle(
-        &part.axis, 0.014)),
-        
+        Key::U => {
+            if part.angle.2 != part.angle.1 {
+                let rot = UnitQuaternion::from_axis_angle(
+                    &part.axis, 0.0174533);
+                part.node.append_rotation_wrt_center(&rot);
+
+                part.angle.1 += (rot.angle() * 180.0 / std::f32::consts::PI).round();
+                println!("current rotation: {:?}", part.angle);
+            };
+        }
+
         _ => {}
     }
 }
@@ -25,6 +41,13 @@ pub fn loc_trans(input: Key, robot: &mut Part) {
         Key::E => robot.node.append_translation(&Translation3::new(0.0, 1.0, 0.0)),
         Key::Q => robot.node.append_translation(&Translation3::new(0.0, -1.0, 0.0)),
         _ => {}
+    }
+}
+
+pub fn animation(part: &mut Part) {
+    for i in 1..100 {
+        part.node.prepend_to_local_rotation(
+            &UnitQuaternion::from_axis_angle(&part.axis, 0.085));
     }
 }
 
