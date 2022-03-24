@@ -1,32 +1,9 @@
 use std::path::Path;
-use kiss3d::scene::SceneNode;
 use kiss3d::window::Window;
-use kiss3d::event::Key;
-use kiss3d::text::Font;
-use na::{Vector3, OVector, Unit, Point2, Point3};
-use ncollide3d::na::Translation3;
+use na::{Translation3, Vector3};
+use crate::node::{Part, Robot};
 
-#[derive(Clone)]
-pub struct Robot {
-    pub joints: Vec<Part>,
-    // pub base: Part,
-    // pub shoulder: Part,
-    // pub lower_arm: Part,
-    // pub elbow: Part,
-    // pub upper_arm: Part,
-    // pub wrist: Part,
-}
-
-#[derive(Clone)]
-pub struct Part {
-    pub node: SceneNode,
-    pub axis: Unit<Vector3<f32>>,
-
-    // MIN, CURRENT, MAX
-    pub angle: (f32, f32, f32),
-}
-
-struct PartsPathes<'a> {
+pub struct PartsPathes<'a> {
     base_obj: &'a Path,
     base_mtl: &'a Path,
     shoulder_obj: &'a Path,
@@ -43,18 +20,18 @@ struct PartsPathes<'a> {
 
 pub fn robot_init(window: &mut Window) -> Robot {
     let parts = PartsPathes {
-        base_obj: Path::new("bluster/src/assets/base.obj"),
-        base_mtl: Path::new("bluster/src/assets/base.mtl"),
-        shoulder_obj: Path::new("bluster/src/assets/shoulder.obj"),
-        shoulder_mtl: Path::new("bluster/src/assets/shoulder.mtl"),
-        lower_arm_obj: Path::new("bluster/src/assets/lower_arm.obj"),
-        lower_arm_mtl: Path::new("bluster/src/assets/lower_arm.mtl"),
-        elbow_obj: Path::new("bluster/src/assets/elbow.obj"),
-        elbow_mtl: Path::new("bluster/src/assets/elbow.mtl"),
-        upper_arm_obj: Path::new("bluster/src/assets/upper_arm.obj"),
-        upper_arm_mtl: Path::new("bluster/src/assets/upper_arm.mtl"),
-        wrist_obj: Path::new("bluster/src/assets/wrist.obj"),
-        wrist_mtl: Path::new("bluster/src/assets/wrist.mtl"),
+        base_obj: Path::new("src/assets/base.obj"),
+        base_mtl: Path::new("src/assets/base.mtl"),
+        shoulder_obj: Path::new("src/assets/shoulder.obj"),
+        shoulder_mtl: Path::new("src/assets/shoulder.mtl"),
+        lower_arm_obj: Path::new("src/assets/lower_arm.obj"),
+        lower_arm_mtl: Path::new("src/assets/lower_arm.mtl"),
+        elbow_obj: Path::new("src/assets/elbow.obj"),
+        elbow_mtl: Path::new("src/assets/elbow.mtl"),
+        upper_arm_obj: Path::new("src/assets/upper_arm.obj"),
+        upper_arm_mtl: Path::new("src/assets/upper_arm.mtl"),
+        wrist_obj: Path::new("src/assets/wrist.obj"),
+        wrist_mtl: Path::new("src/assets/wrist.mtl"),
     };
 
     let scale = Vector3::new(1.0, 1.0, 1.0);
@@ -62,10 +39,10 @@ pub fn robot_init(window: &mut Window) -> Robot {
     let mut shoulder_model = base_model.add_obj( parts.shoulder_obj, parts.shoulder_mtl, scale);
     let mut lower_arm_model = shoulder_model.add_obj(parts.lower_arm_obj, parts.lower_arm_mtl, scale);
     let mut elbow_model = lower_arm_model.add_obj( parts.elbow_obj, parts.elbow_mtl, scale);
-    let mut upper_arm_model = elbow_model.add_obj(parts.upper_arm_obj, parts.upper_arm_obj, scale);
+    let mut upper_arm_model = elbow_model.add_obj(parts.upper_arm_obj, parts.upper_arm_mtl, scale);
     let mut wrist_model = upper_arm_model.add_obj(parts.wrist_obj, parts.wrist_mtl, scale);
 
-     let mut base = Part {
+     let base = Part {
          node: base_model,
          axis: Vector3::y_axis(),
          angle: (0.0, 0.0, 0.0),
@@ -86,13 +63,13 @@ pub fn robot_init(window: &mut Window) -> Robot {
     let mut elbow = Part {
         node: elbow_model,
         axis: Vector3::x_axis(),
-        angle: (-150.0, 0.0, 18.0),
+        angle: (-150.0, 0.0, 25.0),
     };
 
     let mut upper_arm = Part {
         node: upper_arm_model,
         axis: Vector3::x_axis(),
-        angle: (-40.0, 0.0, 160.0),
+        angle: (-40.0, 0.0, 40.0),
     };
 
     let mut wrist = Part {
@@ -108,18 +85,10 @@ pub fn robot_init(window: &mut Window) -> Robot {
     wrist.node.set_local_translation(Translation3::new(0.0, -0.1, 0.32));
 
     Robot {
-        joints: vec![base, shoulder, elbow, lower_arm, upper_arm],
-        // base,
-        // shoulder,
-        // elbow,
-        // lower_arm,
-        // upper_arm,
-        // wrist,
+        joints: vec![base, shoulder, lower_arm, elbow, upper_arm, wrist],
+        index_of_joint: 0
     }
 }
 
-impl Part {
-    pub fn update_angle(mut self, new_angle: f32) {
-        self.angle.1 += new_angle;
-    }
-}
+
+
