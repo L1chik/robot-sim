@@ -16,7 +16,8 @@ use na::{Isometry3, Point3, Point2, Translation3, UnitQuaternion, Vector3, Vecto
 use ncollide3d::pipeline::CollisionGroups;
 use ncollide3d::query::{Ray, RayIntersection};
 use ncollide3d::shape::{FeatureId};
-use crate::node::Robot;
+use crate::gizmo::set_active;
+use crate::node::{Part, Robot};
 
 
 fn draw_ray(ray: Ray<f32>, window: &mut Window) {
@@ -59,23 +60,26 @@ fn draw_grid(window: &mut Window, spacing: f32, slices: u32) {
         }).collect::<Vec<_>>();
 }
 
-fn draw_info(window: &mut Window, robot: &Robot) {
+fn draw_info(window: &mut Window, joints: &Vec<Part>) {
     let font = Font::new(&Path::new("bluster/src/assets/Robot.ttf")).unwrap();
-
-    window.draw_text(
-            format!("Upper hand rotation: {:?}; (min, max): ",
-                    &robot.upper_arm.angle )
-                .as_str(),
-
-        &Point2::new(320.0, 10.0),
-        70.0,
-        &font,
-        &Point3::new(1.0, 0.659, 0.392),
+    let mut offset = 100.0;
+    for joint in joints {
+        window.draw_text(format!("rotation: {:?}", joint.angle).as_str(),
+                         &Point2::new(320.0, 10.0 + offset,),
+                         70.0,
+                         &font,
+                         &Point3::new(1.0, 0.659, 0.392),
         );
 
-    println!("angle: {:?}", robot.upper_arm.angle.1)
+        offset += 60.0;
+    }
 }
 
+// fn stats(joints: Vec<Part>) {
+//     for j in joints {
+//         println!("angles: {:?}", j.angle)
+//     }
+// }
 
 fn main() {
     // Window settings
@@ -101,8 +105,8 @@ fn main() {
 
 
     // Robot mesh
-    let mut robot = node::robot_init(&mut window);
-    let mut active = &mut robot.set_active();
+    let mut robot = &mut node::robot_init(&mut window);
+    // let mut robot_info = &mut robot;
 
 
     // Info
@@ -119,20 +123,9 @@ fn main() {
         let _ = draw_grid(&mut window, 1.0, 30);
         draw_ray(ray, &mut window);
 
-        // window.draw_text(
-        //     format!("Upper arm rotation: {:?}; (min, max): \n\
-        //     Shoulder rotation: {:?}; (min, max): ",
-        //             &robot.upper_arm.angle,
-        //     &robot.shoulder.angle)
-        //         .as_str(),
-        //
-        // &Point2::new(320.0, 10.0),
-        // 70.0,
-        // &Font::default(),
-        // &Point3::new(1.0, 0.659, 0.392),
-        // );
 
-        println!("{:?}", active.angle);
+
+
 
 
         for mut event in window.events().iter() {
@@ -155,39 +148,38 @@ fn main() {
                 },
 
                 WindowEvent::Key(input, Action::Press, _modif) => {
+                    // let mut active = set_active(Key::Key1, robot);
                     match input{
-                        Key::Key1 => {
-                            println!("active is base");
-                            active = &mut robot.base
-                        },
-                        Key::Key2 => {
-                            println!("active is shoulder");
-                            active = &mut robot.shoulder
+                        Key::Key1 | Key::Key2 | Key::Key3 => {
+                            let active = set_active(input, robot);
+                            active
                         }
-                        Key::Key3 => {
-                            active = &mut robot.lower_arm
+                        Key::J => {
+                            gizmo::loc_rot(input, active);
                         }
-                        Key::Key4 => {
-                            active = &mut robot.elbow
-                        }
-                        Key::Key5 => {
-                            active = &mut robot.upper_arm
-                        }
-                        Key::Key6 => {
-                            active = &mut robot.wrist
-                        }
-                        _ => {}
+                        // Key::Key4 => {
+                        //     active = &mut robot.elbow
+                        // }
+                        // Key::Key5 => {
+                        //     active = &mut robot.upper_arm
+                        // }
+                        // Key::Key6 => {
+                        //     active = &mut robot.wrist
+                        // }
+                        _ => {  }
                     }
                     // active = robot.active(input, &mut active);
-                    gizmo::loc_trans(input, active);
-                    gizmo::loc_rot(input, active);
-                }
-                _ => {
+                    // gizmo::loc_trans(input, active);
 
                 }
+                _ => {}
             }
+
         }
 
-        // draw_info(&mut window, &test);
+        // for joint in &robot.joints.clone() {
+        //         println!("angle: {:?}", joint.angle);
+        //     }
+        draw_info(&mut window, &robot.joints);
     }
 }

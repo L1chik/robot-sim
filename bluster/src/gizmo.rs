@@ -4,7 +4,6 @@ use na::{Translation3, UnitQuaternion, Vector3, Unit};
 use crate::node::{Robot, Part};
 
 pub fn loc_rot(input: Key, part: &mut Part) {
-
     match input {
         Key::J => {
             if part.angle.0 != part.angle.1 {
@@ -27,8 +26,26 @@ pub fn loc_rot(input: Key, part: &mut Part) {
                 println!("current rotation: {:?}", part.angle);
             };
         }
-
         _ => {}
+    }
+
+}
+
+pub fn set_active(input: Key, robot: &mut Robot) -> &mut Part {
+    match input {
+        Key::Key1 => {
+            println!("active is base");
+            return &mut robot.joints[1]
+        },
+        Key::Key2 => {
+            println!("active is shoulder");
+            return &mut robot.joints[2]
+        },
+        Key::Key3 => {
+            println!("active is lower_arm");
+            return &mut robot.joints[3]
+        },
+        _ => {return &mut robot.joints[1]}
     }
 }
 

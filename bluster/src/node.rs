@@ -8,12 +8,13 @@ use ncollide3d::na::Translation3;
 
 #[derive(Clone)]
 pub struct Robot {
-    pub base: Part,
-    pub shoulder: Part,
-    pub lower_arm: Part,
-    pub elbow: Part,
-    pub upper_arm: Part,
-    pub wrist: Part,
+    pub joints: Vec<Part>,
+    // pub base: Part,
+    // pub shoulder: Part,
+    // pub lower_arm: Part,
+    // pub elbow: Part,
+    // pub upper_arm: Part,
+    // pub wrist: Part,
 }
 
 #[derive(Clone)]
@@ -85,7 +86,7 @@ pub fn robot_init(window: &mut Window) -> Robot {
     let mut elbow = Part {
         node: elbow_model,
         axis: Vector3::x_axis(),
-        angle: (180.0, 0.0, 18.0),
+        angle: (-150.0, 0.0, 18.0),
     };
 
     let mut upper_arm = Part {
@@ -107,17 +108,18 @@ pub fn robot_init(window: &mut Window) -> Robot {
     wrist.node.set_local_translation(Translation3::new(0.0, -0.1, 0.32));
 
     Robot {
-        base,
-        shoulder,
-        elbow,
-        lower_arm,
-        upper_arm,
-        wrist,
+        joints: vec![base, shoulder, elbow, lower_arm, upper_arm],
+        // base,
+        // shoulder,
+        // elbow,
+        // lower_arm,
+        // upper_arm,
+        // wrist,
     }
 }
 
-impl Robot {
-    pub fn set_active(&mut self) -> Part {
-        self.base.clone()
+impl Part {
+    pub fn update_angle(mut self, new_angle: f32) {
+        self.angle.1 += new_angle;
     }
 }
