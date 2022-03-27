@@ -18,6 +18,11 @@ pub struct Part {
     pub angle: (f32, f32, f32),
 }
 
+#[derive(Debug, Clone, Default)]
+pub struct RPoint {
+    axis_angles: Vec<f32>,
+}
+
 impl Robot {
     pub fn set_joint_index(&mut self, joint: usize) {
         self.index_of_joint = joint;
@@ -25,5 +30,13 @@ impl Robot {
 
     pub fn get_active_joint(&self) -> usize {
         self.index_of_joint
+    }
+}
+
+impl RPoint {
+    pub fn save_point(&mut self, robot: &Robot) {
+        for (id, joint) in robot.joints.iter().enumerate() {
+            self.axis_angles.push(joint.angle.1)
+        }
     }
 }

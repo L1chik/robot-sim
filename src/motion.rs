@@ -22,7 +22,7 @@ pub fn rotate_joint(joint: usize, angle: f32, robot: &mut Robot) {
 }
 
 #[allow(unused)]
-pub fn loc_trans(input: Key, robot: &mut Part) {
+pub fn move_base (input: Key, robot: &mut Part) {
     match input {
         Key::A => robot.node.append_translation(&Translation3::new(-1.0, 0.0, 0.0)),
         Key::D => robot.node.append_translation(&Translation3::new(1.0, 0.0, 0.0)),

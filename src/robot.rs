@@ -2,6 +2,8 @@ use std::path::Path;
 use kiss3d::window::Window;
 use na::{Translation3, Vector3};
 use crate::node::{Part, Robot};
+use crate::gizmo::spawn_gizmo;
+
 
 pub struct PartsPathes<'a> {
     base_obj: &'a Path,
@@ -83,6 +85,8 @@ pub fn robot_init(window: &mut Window) -> Robot {
     elbow.node.set_local_translation(Translation3::new(0.0, 0.73, -1.47));
     upper_arm.node.set_local_translation(Translation3::new(0.0, 0.9, 1.85));
     wrist.node.set_local_translation(Translation3::new(0.0, -0.1, 0.32));
+
+    // spawn_gizmo(&mut wrist.node);
 
     Robot {
         joints: vec![base, shoulder, lower_arm, elbow, upper_arm, wrist],

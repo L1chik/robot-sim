@@ -2,6 +2,7 @@ mod motion;
 mod scene;
 mod robot;
 mod node;
+mod gizmo;
 
 
 extern crate kiss3d;
@@ -15,7 +16,7 @@ use kiss3d::camera::{ArcBall, Camera};
 use na::{Point3, Point2, Vector3, Translation2, Vector2};
 use ncollide3d::query::{Ray};
 use crate::motion::{rotate_joint};
-use crate::node::Robot;
+use crate::node::{Robot, RPoint};
 use crate::scene::grid::{draw_grid, draw_ray};
 use crate::scene::stats::draw_info;
 
@@ -52,6 +53,9 @@ fn main() {
     let mut tablet = window.add_rectangle(350.0, 400.0);
     tablet.set_local_translation(Translation2::new(480.0, 160.0));
     tablet.set_color(0.278, 0.278, 0.278);
+
+    // Custom settings
+    let mut r_point = RPoint::default();
 
     // TODO: object picking with raycast. Impl RayCast for SceneNode
     // let mut cube = Cuboid::new(Vector3::new(1.0f32, 1.0, 1.0));
@@ -121,6 +125,9 @@ fn main() {
                         }
                         Key::U => {
                             rotate_joint(robot.get_active_joint(), 0.017, robot)
+                        }
+                        Key::P => {
+                            r_point.save_point(&robot);
                         }
                         _ => {  }
                     }
