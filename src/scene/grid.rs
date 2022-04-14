@@ -1,5 +1,5 @@
 use kiss3d::window::Window;
-use na::{Point3, Vector3};
+use nalgebra::{Point3, Vector3};
 use ncollide3d::query::{Ray, RayIntersection};
 use ncollide3d::shape::FeatureId;
 
