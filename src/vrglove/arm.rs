@@ -1,7 +1,7 @@
 use std::path::Path;
 use kiss3d::window::Window;
 use nalgebra::{Translation3, Vector3};
-use crate::Phalanx;
+use crate::{main, Phalanx};
 
 pub struct ArmParts<'a> {
     main_arm_obj: &'a Path,
@@ -50,6 +50,7 @@ pub fn arm_init(window: &mut Window) -> VrGlove {
         cur_pos: 0,
     };
 
+    index1.model.set_local_translation(Translation3::new(-0.016, 0.0, 0.092));
     index2.model.set_local_translation(Translation3::new(-0.0025, -0.002, 0.035));
     index3.model.set_local_translation(Translation3::new(-0.002, -0.0041, 0.03));
 

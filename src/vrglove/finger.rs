@@ -19,4 +19,8 @@ impl Phalanx {
 
         self.model.set_local_rotation(rot);
     }
+    
+    pub fn rotate_base(roll: f32, pitch: f32, yaw: f32) {
+        todo!()
+    }
 }
