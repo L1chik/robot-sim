@@ -17,11 +17,11 @@ pub struct VrGlove {
 
 pub fn arm_init(window: &mut Window) -> VrGlove {
     let parts = ArmParts {
-        main_arm_obj: Path::new("assets/main_arm.obj"),
-        index1_obj: Path::new("assets/index1.obj"),
-        index2_obj: Path::new("assets/index2.obj"),
-        index3_obj: Path::new("assets/index3.obj"),
-        mtl: Path::new("assets/main_arm.mtl"),
+        main_arm_obj: Path::new("src/assets/main_arm.obj"),
+        index1_obj: Path::new("src/assets/index1.obj"),
+        index2_obj: Path::new("src/assets/index2.obj"),
+        index3_obj: Path::new("src/assets/index3.obj"),
+        mtl: Path::new("src/assets/main_arm.mtl"),
     };
 
     let scale = Vector3::new(1.0, 1.0, 1.0);
@@ -54,6 +54,6 @@ pub fn arm_init(window: &mut Window) -> VrGlove {
     index3.model.set_local_translation(Translation3::new(-0.002, -0.0041, 0.03));
 
     VrGlove {
-        phalanges: vec![main_arm, index1, index2, index3],
+        phalanges: vec![index1, index2, index3, main_arm],
     }
 }

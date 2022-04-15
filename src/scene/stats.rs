@@ -2,7 +2,7 @@
 // use kiss3d::text::Font;
 // use kiss3d::window::Window;
 // use nalgebra::{Point2, Point3};
-// use node::Robot;
+// // use crate::node::Robot;
 //
 // pub fn draw_info(window: &mut Window, robot: &mut Robot) {
 //     let font = Font::new(&Path::new("src/assets/Robot.ttf")).unwrap();

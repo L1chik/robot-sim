@@ -3,6 +3,7 @@ use nalgebra::{UnitQuaternion, Vector3};
 
 const MAGIC_VALUE: f32 = 651.2605042;
 
+#[derive(Clone)]
 pub struct Phalanx {
     pub model: SceneNode,
     pub cur_pos: i32,

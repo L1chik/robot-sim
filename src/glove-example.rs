@@ -4,7 +4,7 @@ use kiss3d::camera::ArcBall;
 use kiss3d::light::Light;
 use kiss3d::window::Window;
 use nalgebra::{Point3, Vector3};
-use crate::vrglove::encoder::{PortReader, init_port, string_to_val, serial_value};
+use crate::vrglove::encoder::{init_port, string_to_val, serial_value, serial_read};
 use crate::vrglove::finger::Phalanx;
 use crate::scene::grid::draw_grid;
 use crate::vrglove::arm::{VrGlove, arm_init};
@@ -34,9 +34,10 @@ fn main() {
 
 
     while window.render_with_camera(&mut arc_ball) {
-        val = serial_value(&mut reader);
+        // val = serial_value(&mut reader);
         draw_grid(&mut window, 1.0, 30);
 
-        vrglove.phalanges[2].rotate_phalanx(val);
+        serial_read(&mut reader, &mut vrglove);
+        // vrglove.phalanges[2].rotate_phalanx(val);
     }
 }
