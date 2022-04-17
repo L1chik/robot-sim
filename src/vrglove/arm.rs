@@ -1,4 +1,5 @@
 use std::path::Path;
+use kiss3d::scene::SceneNode;
 use kiss3d::window::Window;
 use nalgebra::{Translation3, Vector3};
 use crate::{main, Phalanx};
@@ -15,7 +16,7 @@ pub struct VrGlove {
     pub phalanges: Vec<Phalanx>,
 }
 
-pub fn arm_init(window: &mut Window) -> VrGlove {
+pub fn arm_init(window: &mut Window) -> (VrGlove, Phalanx) {
     let parts = ArmParts {
         main_arm_obj: Path::new("src/assets/main_arm.obj"),
         index1_obj: Path::new("src/assets/index1.obj"),
@@ -54,7 +55,5 @@ pub fn arm_init(window: &mut Window) -> VrGlove {
     index2.model.set_local_translation(Translation3::new(-0.0025, -0.002, 0.035));
     index3.model.set_local_translation(Translation3::new(-0.002, -0.0041, 0.03));
 
-    VrGlove {
-        phalanges: vec![index1, index2, index3, main_arm],
-    }
+    (VrGlove { phalanges: vec![index1, index2, index3], }, main_arm)
 }

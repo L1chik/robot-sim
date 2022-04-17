@@ -1,5 +1,7 @@
 use std::io::{BufRead, BufReader, ErrorKind};
 use std::path::Path;
+use std::thread;
+use std::time::Duration;
 use kiss3d::camera::ArcBall;
 use kiss3d::light::Light;
 use kiss3d::window::Window;
@@ -25,19 +27,18 @@ fn main() {
     let mut arc_ball = ArcBall::new(eye, at);
 
     //Port initialisation
-    let mut port = init_port("/dev/ttyACM0", 4800);
-    let mut reader = BufReader::new(port);
-    let mut val = 0;
+    // let mut port = init_port("/dev/ttyACM0", 4800);
+    // let mut reader = BufReader::new(port);
+    // let mut val = 0;
 
     //VR glove settings
-    let mut vrglove = arm_init(&mut window);
+    let (mut vrglove, mut main_arm) = arm_init(&mut window);
+    // let mut buff= String::new();
 
 
     while window.render_with_camera(&mut arc_ball) {
-        // val = serial_value(&mut reader);
         draw_grid(&mut window, 1.0, 30);
 
-        serial_read(&mut reader, &mut vrglove);
-        // vrglove.phalanges[2].rotate_phalanx(val);
+        // serial_read(&mut reader, &mut vrglove, &mut main_arm);
     }
 }

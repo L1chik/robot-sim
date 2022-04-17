@@ -1,7 +1,7 @@
 use kiss3d::scene::SceneNode;
 use nalgebra::{UnitQuaternion, Vector3};
 
-const MAGIC_VALUE: f32 = 651.2605042;
+const MAGIC_VALUE: f32 = 325.9485612;
 
 #[derive(Clone)]
 pub struct Phalanx {
