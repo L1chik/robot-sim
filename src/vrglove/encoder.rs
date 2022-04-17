@@ -19,26 +19,6 @@ pub fn init_port(port_name: &str, baud_rate: u32) -> Box<dyn SerialPort> {
     port
 }
 
-pub fn serial_value(reader: &mut BufReader<Box<dyn SerialPort>>) -> i32 {
-    let mut string= String::new();
-
-    match reader.read_line(&mut string) {
-        Ok(t) => {
-            return string.trim().parse::<i32>().unwrap();
-        },
-        Err(ref e) if e.kind() == ErrorKind::TimedOut => (),
-        Err(e) => (),
-    }
-
-    -1
-}
-
-pub fn string_to_val(str: &String) -> i32 {
-    let mut buff = 0;
-
-    buff
-}
-
 pub fn serial_read(reader: &mut BufReader<Box<dyn SerialPort>>, vrglove: &mut VrGlove, arm: &mut Phalanx) {
 
     let mut buff= String::new();
@@ -58,15 +38,6 @@ pub fn serial_read(reader: &mut BufReader<Box<dyn SerialPort>>, vrglove: &mut Vr
         mpu6050(&vec[..3], arm);
         control_finger(&vec[3..], vrglove);
     }
-
-    // for pair in vec.into_iter().zip(vrglove.phalanges.clone().into_iter()) {
-    //     let (value, mut phalanx) = pair;
-    //     let val = match value.parse::<i32>() {
-    //         Ok(res) => res,
-    //         Err(_) => -1,
-    //     };
-    //     phalanx.rotate_phalanx(val); //value.parse::<i32>().unwrap()
-    // }
 }
 
 pub fn mpu6050(slice: &[&str], arm: &mut Phalanx) {
@@ -84,7 +55,6 @@ pub fn mpu6050(slice: &[&str], arm: &mut Phalanx) {
         Err(e) => (),
     }
 
-    println!("roll {}, pitch {}, yaw {}", &roll, &pitch, &yaw);
     arm.model.set_local_rotation(
         UnitQuaternion::from_euler_angles(roll, pitch, yaw));
 }
