@@ -29,5 +29,9 @@ cargo run --bin glove
 ```
 **Note:** It won't start without correct serial port. Change it in glove-example.rs init_port(name, baud_rate). _I will try to refactor everything to a separate library soon_
 
-https://user-images.githubusercontent.com/55959772/164725681-e6faff84-fcf3-4f96-9fbb-42da0c932b35.mp4
+
+https://user-images.githubusercontent.com/55959772/164773258-8d154c9a-ef59-4cd2-a0da-82e23d7455d5.mp4
+
+
+
 
