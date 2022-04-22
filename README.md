@@ -11,7 +11,7 @@ Industrial Robot Simulator, which currently provide Forward Kinematics. In the f
 cargo run --bin bluster
 ```
 
-![Bluster robot-sim](/images/bluster.mp4 "Bluster")
+![Bluster robot-sim](/images/bluster.gif "Bluster")
 
 Usage:
 - `0 - 5`: joints switching (0 - static base, 1 - shoulder, 2 - lower arm, 3 - elbow, 4 - upper arm, 5 - wrist)
