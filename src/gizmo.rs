@@ -1,13 +1,12 @@
 mod position;
 
-use std::path::Path;
 use kiss3d::scene::SceneNode;
 use na::Vector3;
-use ncollide3d::shape::DeformationsType::Vectors;
+use std::path::Path;
 
 pub struct GizmoPathes<'a> {
     pub gizmo_obj: &'a Path,
-    pub gizmo_mtl: &'a Path
+    pub gizmo_mtl: &'a Path,
 }
 
 pub fn spawn_gizmo(object: &mut SceneNode) {

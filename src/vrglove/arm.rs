@@ -1,8 +1,7 @@
-use std::path::Path;
-use kiss3d::scene::SceneNode;
+use crate::Phalanx;
 use kiss3d::window::Window;
 use nalgebra::{Translation3, Vector3};
-use crate::{main, Phalanx};
+use std::path::Path;
 
 pub struct ArmParts<'a> {
     main_arm_obj: &'a Path,
@@ -44,11 +43,6 @@ pub fn arm_init(window: &mut Window) -> (VrGlove, Phalanx) {
     let mut index2_model = index1_model.add_obj(parts.index2_obj, parts.mtl, scale);
     let mut index3_model = index2_model.add_obj(parts.index3_obj, parts.mtl, scale);
 
-    // main_arm_model.add_child(thumb_model);
-    // main_arm_model.add_child(middle_model);
-    // main_arm_model.add_child(ring_model);
-    // main_arm_model.add_child(pink_model);
-
     let mut main_arm = Phalanx {
         model: main_arm_model,
         cur_pos: 0,
@@ -74,9 +68,20 @@ pub fn arm_init(window: &mut Window) -> (VrGlove, Phalanx) {
     ring_model.set_local_translation(Translation3::new(-0.0158, -0.002, 0.032));
     pink_model.set_local_translation(Translation3::new(-0.0332, -0.002, 0.022));
 
-    index1.model.set_local_translation(Translation3::new(0.0233, -0.0021, 0.036));
-    index2.model.set_local_translation(Translation3::new(-0.0025, -0.002, 0.035));
-    index3.model.set_local_translation(Translation3::new(-0.002, -0.0041, 0.03));
+    index1
+        .model
+        .set_local_translation(Translation3::new(0.0233, -0.0021, 0.036));
+    index2
+        .model
+        .set_local_translation(Translation3::new(-0.0025, -0.002, 0.035));
+    index3
+        .model
+        .set_local_translation(Translation3::new(-0.002, -0.0041, 0.03));
 
-    (VrGlove { phalanges: vec![index1, index2, index3], }, main_arm)
+    (
+        VrGlove {
+            phalanges: vec![index1, index2, index3],
+        },
+        main_arm,
+    )
 }

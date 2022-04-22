@@ -1,7 +1,7 @@
 use kiss3d::scene::SceneNode;
 use nalgebra::{UnitQuaternion, Vector3};
 
-const MAGIC_VALUE: f32 = 325.9485612;
+const MAGIC_VALUE: f32 = 325.948_561;
 
 #[derive(Clone)]
 pub struct Phalanx {
@@ -19,7 +19,7 @@ impl Phalanx {
 
         self.model.set_local_rotation(rot);
     }
-    
+
     pub fn rotate_base(roll: f32, pitch: f32, yaw: f32) {
         todo!()
     }
