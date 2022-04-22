@@ -21,10 +21,13 @@ Usage:
 
 ***
 # VRGlove
-VR glove prototype: Arduino Nano, MPU6050, potentiometers. Finger bending tracking and hand rotation done.
+VR glove prototype: Arduino Nano, MPU6050, potentiometers, case is designed in Fusion360 and printed with Picasso designer x pro. Finger bending tracking and hand rotation done.
 _Todo: Simple VR headset, VR tracking system with cameras like in oculus._
 
 ```
 cargo run --bin glove
 ```
-**Note:** It won't start without correct serial port.
+**Note:** It won't start without correct serial port. Change it in glove-example.rs init_port(name, baud_rate). _I will try to refactor everything to a separate library soon_
+
+https://user-images.githubusercontent.com/55959772/164725681-e6faff84-fcf3-4f96-9fbb-42da0c932b35.mp4
+
