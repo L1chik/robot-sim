@@ -1,21 +1,17 @@
-mod gizmo;
-mod motion;
-mod robot;
-pub mod scene;
-
 extern crate kiss3d;
 extern crate nalgebra as na;
 
-use crate::motion::rotate_joint;
-use crate::scene::grid::{draw_grid, draw_ray};
-use crate::scene::stats::draw_info;
+use bluster::motion::rotate_joint;
+use bluster::scene::grid::{draw_grid, draw_ray};
+use bluster::scene::stats::draw_info;
 use kiss3d::camera::{ArcBall, Camera};
 use kiss3d::event::{Action, Key, Modifiers, MouseButton, WindowEvent};
 use kiss3d::light::Light;
 use kiss3d::window::Window;
 use na::{Point2, Point3, Translation2, Vector2, Vector3};
 use ncollide3d::query::Ray;
-use scene::node::RPoint;
+use bluster::scene::node::RPoint;
+use bluster::robot;
 
 static CTRL: Modifiers = Modifiers::Control;
 

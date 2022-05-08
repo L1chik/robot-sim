@@ -6,7 +6,11 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [[bin]]
 name = "glove"
-path = "src/glove-example.rs"
+path = "src/bin/glove-example.rs"
+
+[[bin]]
+name = "bluster"
+path = "src/bin/bluster.rs"
 
 [dependencies]
 kiss3d = "0.34.0"
