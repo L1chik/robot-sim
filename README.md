@@ -19,10 +19,15 @@ Usage:
 - `u`: positive rotation of the joint
 - `ctrl + horizontal mouse movement`: rotation of the joint
 
+Demonstration of the latest version of the system with real robot control:
+
+https://user-images.githubusercontent.com/55959772/233969782-b2e0af50-717d-4989-a837-63863593682f.mp4
+
+
 ***
 # VRGlove
 VR glove prototype: Arduino Nano, MPU6050, potentiometers, case is designed in Fusion360 and printed with Picasso designer x pro. Finger bending tracking and hand rotation done.
-_Todo: Simple VR headset, VR tracking system with cameras like in oculus._
+_Todo: Simple VR headset, VR inside-out tracking system with cameras like in oculus quest._
 
 ```
 cargo run --bin glove
